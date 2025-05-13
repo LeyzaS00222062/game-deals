@@ -2,7 +2,8 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GamedetailsService } from '../../gamedetails.service';
 import { GamedealService } from '../../gamedeal.service';
-import { Game } from '../../game.model';
+import { Game, Gamedeals } from '../../game.model';
+import { CheapskateApiService } from '../../cheapskate-api.service';
 
 @Component({
   selector: 'app-games',
@@ -11,16 +12,20 @@ import { Game } from '../../game.model';
   styleUrl: './games.component.css'
 })
 export class GamesComponent {
+  title = "Game CheapSkate"
+  gameData: Game | undefined;
+  errorMessage:any;
 
-  games:any[]=[];
-  private currentGame!: Game;
+  constructor(private _cheapSkateApiService:CheapskateApiService){}
 
-  @Output() onSelectedGame EventEmitter<Game>;
+  getGameData(gameTitle:string): boolean {
+    this._cheapSkateApiService.getGameData(gameTitle).subscribe(
+      gameData =>{
+        this.gameData=gameData;
 
-  constructor(private gamedetails:GamedetailsService){
-    this.onSelectedGame = new EventEmitter();
+      }
+    )
+    return false;
   }
-
-  
 
 }
